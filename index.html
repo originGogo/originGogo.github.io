@@ -1,0 +1,169 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #time {
+            font-size: 50px;
+            display: flex;
+            text-align: center;
+            margin: 50px auto;
+            width: 500px;
+            height: 100x;
+        }
+
+        #timebox {
+            border: 1px black solid;
+            font-size: 50px;
+            width: 160px;
+            height: 80px;
+            text-align: center;
+        }
+
+        #line {
+            margin: auto;
+            text-align: center;
+        }
+
+        #container {
+            display: flex;
+            flex-wrap: wrap;
+            border: 1px black solid;
+            font-size: 50px;
+            margin: auto;
+        }
+
+        #win {
+            color: red;
+            font-size: 100px;
+            font-weight: bold;
+            text-align: center;
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="time">共用时<div id="timebox">?</div>秒</div>
+    <form id="form1">
+        <div id="line">
+            输入生成的盒子数：
+            <input type="text" id="inputnum" value="" placeholder="请输入正整数">;
+            <input type="button" id="bu" value="一键生成" onclick="getbox()">;
+            <input type="button" id="be" value="开始游戏" onclick="begin()">;
+        </div>
+        <div id="container"></div>
+        <div id="win"><a href="不要点这个1.html">CONGRATRULATION!</a></div>
+    </form>
+    <script type="text/javascript">
+        var isstart = false;
+        var isend = false;
+        var p = 0;
+        var step = 1;
+        function getbox() {
+            setInterval(time, 1000);
+            num = document.getElementById("inputnum").value;
+            var numgroup = new Array(num);
+            for (var n = 0; n < num; n++) {
+                numgroup[n] = n + 1;
+            }
+            numgroup = rbe(numgroup);
+            for (var i = 0; i < num; i++) {
+                j = numgroup[i];
+                divbox(i, j);
+            }
+            document.getElementById("bu").onclick = null;
+        }
+
+        function rbe(arr) {
+            var l = arr.length;
+            var randnum = new Array(l);
+            for (var n = 0; n < l; n++) {
+                randnum[n] = 1000 * Math.round(Math.random() * 10000);
+                randnum[n] = randnum[n] + arr[n];
+            }
+            randnum.sort();
+            var newnum = new Array(l);
+            for (var n = 0; n < l; n++) {
+                newnum[n] = randnum[n] % 1000;
+            }
+            return newnum;
+        }
+
+        function divbox(i, j) {
+            var newdiv = document.createElement("box");
+            newdiv.id = "box" + i;//************非常重要*************
+            newdiv.innerHTML = j;
+            newdiv.style.fontSize = "70px";
+            newdiv.style.width = "247px";
+            newdiv.style.height = "200px";
+            newdiv.style.background = "orange";
+            newdiv.style.border = "white 1px solid";
+            newdiv.style.lineHeight = "200px";
+            newdiv.style.textAlign = "center";
+            newdiv.style.display = "block";
+            newdiv.style.color = "black";
+            document.getElementById("container").appendChild(newdiv);
+        }
+        function begin() {
+            if(isstart ==  false){
+                isstart = true; 
+            }
+            hide();
+            for (var i = 0; i < document.getElementById("inputnum").value; i++) {
+                var newdiv = document.getElementById("box" + i);
+                newdiv.onmouseover = function () { this.style.background = "red"; this.style.color = "red" };
+                newdiv.onmouseout = function () { this.style.background = 'orange'; this.style.color = 'orange' }
+                newdiv.onclick = function () { sure(this.id); }
+            }
+
+        }
+        function sure(id) {
+            j = document.getElementById(id);
+            if (j.innerHTML == step) {
+                j.style.color = 'aqua';
+                j.style.background = 'blue';
+                j.onmouseout = null;
+                j.onmouseover = null;
+                j.onclick = null;
+                step = step + 1;
+                if (step - 1 == document.getElementById("inputnum").value) {
+                    document.getElementById("win").style.visibility = "visible";
+                    isend = true;
+                }
+            }
+            else {
+                j.style.color = 'aqua';
+                setTimeout(hide2, 100);
+            }
+        }
+
+
+        function hide() {
+            num = document.getElementById("inputnum").value;
+            for (var i = 0; i < num; i++) {
+                var obj_g = document.getElementById("box" + i);
+                obj_g.style.color = "orange";
+            }
+        }
+        function hide2() {
+            j.style.color = 'orange';
+            j.style.background = 'orange';
+        }
+
+        function time() {
+            time = document.getElementById("timebox");
+            if (isstart == true && isend == false) {
+                p = p + 1;
+                time.innerHTML = p;
+            }
+        }
+    </script>
+</body>
+
+</html>
